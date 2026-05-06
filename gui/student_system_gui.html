@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Student Registration System</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;background:#f5f5f5;color:#111;padding:1.5rem}
+body.dark{background:#1a1a1a;color:#eee}
+.app{max-width:720px;margin:0 auto}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid #e0e0e0}
+body.dark .topbar{border-color:#333}
+.topbar h1{font-size:18px;font-weight:500}
+.tabs{display:flex;gap:4px;margin-bottom:1.5rem;background:#e8e8e8;border-radius:10px;padding:4px}
+body.dark .tabs{background:#2a2a2a}
+.tab{flex:1;padding:8px;text-align:center;font-size:13px;cursor:pointer;border-radius:8px;color:#666;border:none;background:transparent}
+.tab.active{background:#fff;color:#111;font-weight:500;border:1px solid #ddd}
+body.dark .tab.active{background:#333;color:#eee;border-color:#444}
+.section{display:none}.section.active{display:block}
+.card{background:#fff;border:1px solid #e0e0e0;border-radius:12px;padding:1rem 1.25rem;margin-bottom:1rem}
+body.dark .card{background:#222;border-color:#333}
+.card h2{font-size:15px;font-weight:500;margin-bottom:1rem}
+.form-row{margin-bottom:12px}
+.form-row label{display:block;font-size:13px;color:#666;margin-bottom:4px}
+body.dark .form-row label{color:#aaa}
+.form-row input,.form-row select{width:100%;padding:8px 10px;font-size:14px;border-radius:8px;border:1px solid #ccc;background:#fff;color:#111}
+body.dark .form-row input,body.dark .form-row select{background:#2a2a2a;color:#eee;border-color:#444}
+.form-row input:focus,.form-row select:focus{outline:none;border-color:#888}
+.btn{padding:8px 18px;border-radius:8px;border:1px solid #ccc;background:transparent;color:#111;font-size:13px;cursor:pointer;font-weight:500}
+body.dark .btn{color:#eee;border-color:#444}
+.btn:hover{background:#f0f0f0}
+body.dark .btn:hover{background:#2a2a2a}
+.btn.primary{background:#111;color:#fff;border-color:#111}
+body.dark .btn.primary{background:#eee;color:#111;border-color:#eee}
+.btn.primary:hover{opacity:0.85}
+.btn.danger{color:#a32d2d;border-color:#a32d2d}
+.btn.danger:hover{background:#fcebeb}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.metric{background:#f5f5f5;border-radius:8px;padding:1rem;text-align:center}
+body.dark .metric{background:#2a2a2a}
+.metric .val{font-size:24px;font-weight:500}
+.metric .lbl{font-size:12px;color:#888;margin-top:4px}
+.course-list{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.course-item{background:#f5f5f5;border-radius:8px;padding:8px 10px;display:flex;align-items:center;gap:8px;cursor:pointer;border:1px solid transparent;transition:all 0.15s}
+body.dark .course-item{background:#2a2a2a}
+.course-item:hover{border-color:#ccc}
+.course-item.selected{border-color:#185fa5;background:#e6f1fb}
+body.dark .course-item.selected{background:#0c2a45}
+.course-item input[type=checkbox]{accent-color:#185fa5;width:15px;height:15px;flex-shrink:0}
+.course-item .cname{font-size:13px;font-weight:500}
+.course-item .cmeta{font-size:11px;color:#888}
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500}
+.badge.normal{background:#e6f1fb;color:#0c447c}
+.badge.summer{background:#e1f5ee;color:#085041}
+.badge.general{background:#eeedfe;color:#3c3489}
+.badge.special{background:#faeeda;color:#633806}
+.student-card{background:#fff;border:1px solid #e0e0e0;border-radius:12px;padding:1rem 1.25rem;margin-bottom:10px}
+body.dark .student-card{background:#222;border-color:#333}
+.student-header{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.avatar{width:40px;height:40px;border-radius:50%;background:#e6f1fb;display:flex;align-items:center;justify-content:center;font-weight:500;font-size:14px;color:#0c447c;flex-shrink:0}
+.student-info h3{font-size:15px;font-weight:500}
+.student-info p{font-size:12px;color:#888}
+.gpa-bar{height:6px;background:#e8e8e8;border-radius:4px;overflow:hidden;margin-top:6px}
+body.dark .gpa-bar{background:#333}
+.gpa-fill{height:100%;border-radius:4px}
+.divider{border:none;border-top:1px solid #e8e8e8;margin:12px 0}
+body.dark .divider{border-color:#333}
+.reg-course-tag{display:inline-block;background:#f5f5f5;border-radius:8px;padding:4px 10px;font-size:12px;color:#666;margin:3px}
+body.dark .reg-course-tag{background:#2a2a2a;color:#aaa}
+.empty{text-align:center;padding:2rem;color:#888;font-size:14px}
+.alert{padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:12px}
+.alert.error{background:#fcebeb;color:#791f1f;border:1px solid #f09595}
+.step-indicator{display:flex;align-items:center;gap:8px;margin-bottom:1rem}
+.step{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;flex-shrink:0}
+.step.done{background:#185fa5;color:white}
+.step.active{background:#e8e8e8;color:#111;border:1px solid #aaa}
+body.dark .step.active{background:#333;color:#eee}
+.step.pending{background:#e8e8e8;color:#aaa}
+body.dark .step.pending{background:#2a2a2a}
+.step-line{flex:1;height:1px;background:#e0e0e0}
+body.dark .step-line{background:#333}
+.grade-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #e8e8e8}
+body.dark .grade-row{border-color:#333}
+.grade-row:last-child{border-bottom:none}
+.grade-row .gname{flex:1;font-size:13px}
+.grade-row input{width:80px;padding:6px 8px;font-size:13px;border-radius:8px;border:1px solid #ccc;background:#fff;color:#111;text-align:center}
+body.dark .grade-row input{background:#2a2a2a;color:#eee;border-color:#444}
+.grade-chip{font-size:11px;font-weight:500;padding:2px 8px;border-radius:20px;min-width:36px;text-align:center}
+.gpa-good{background:#eaf3de;color:#27500a}
+.gpa-mid{background:#faeeda;color:#633806}
+.gpa-low{background:#fcebeb;color:#791f1f}
+.course-detail-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid #e8e8e8;font-size:12px}
+body.dark .course-detail-row{border-color:#333}
+.course-detail-row:last-child{border-bottom:none}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <h1>Student Registration System</h1>
+    <button class="btn" onclick="document.body.classList.toggle('dark')">Toggle dark mode</button>
+  </div>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('add')">Add student</button>
+    <button class="tab" onclick="switchTab('students')">Students</button>
+    <button class="tab" onclick="switchTab('courses')">Courses</button>
+  </div>
+
+  <div id="sec-add" class="section active">
+    <div class="card">
+      <div class="step-indicator">
+        <div class="step active" id="s1">1</div><div class="step-line"></div>
+        <div class="step pending" id="s2">2</div><div class="step-line"></div>
+        <div class="step pending" id="s3">3</div><div class="step-line"></div>
+        <div class="step pending" id="s4">4</div>
+      </div>
+      <div id="step1">
+        <h2>Student info</h2>
+        <div id="form-alert"></div>
+        <div class="form-row"><label>Full name</label><input id="inp-name" placeholder="e.g. Ahmed Mohamed"/></div>
+        <div class="form-row"><label>Student ID</label><input id="inp-id" placeholder="e.g. S2024001"/></div>
+        <div class="grid2">
+          <div class="form-row"><label>Level (1–4)</label><input id="inp-level" type="number" min="1" max="4" placeholder="1"/></div>
+          <div class="form-row"><label>Student type</label>
+            <select id="inp-type">
+              <option value="general">General program</option>
+              <option value="special">Special program</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn primary" onclick="goStep2()">Next — choose courses</button>
+      </div>
+      <div id="step2" style="display:none">
+        <h2>Register courses</h2>
+        <p style="font-size:13px;color:#888;margin-bottom:10px" id="course-hint"></p>
+        <div id="course-list" class="course-list"></div>
+        <div style="display:flex;gap:8px;margin-top:14px">
+          <button class="btn" onclick="setStep(1)">Back</button>
+          <button class="btn primary" onclick="goStep3()">Next — enter grades</button>
+        </div>
+      </div>
+      <div id="step3" style="display:none">
+        <h2>Enter grades</h2>
+        <p style="font-size:13px;color:#888;margin-bottom:12px">Enter a grade (0–100) for each registered course.</p>
+        <div id="grade-list"></div>
+        <div style="display:flex;gap:8px;margin-top:14px">
+          <button class="btn" onclick="setStep(2)">Back</button>
+          <button class="btn primary" onclick="goStep4()">Next — confirm</button>
+        </div>
+      </div>
+      <div id="step4" style="display:none">
+        <h2>Confirm registration</h2>
+        <div id="confirm-content"></div>
+        <div style="display:flex;gap:8px;margin-top:14px">
+          <button class="btn" onclick="setStep(3)">Back</button>
+          <button class="btn primary" onclick="submitStudent()">Submit student</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="sec-students" class="section">
+    <div class="grid2" style="margin-bottom:1rem">
+      <div class="metric"><div class="val" id="m-total">0</div><div class="lbl">Total students</div></div>
+      <div class="metric"><div class="val" id="m-avg">—</div><div class="lbl">Average GPA</div></div>
+    </div>
+    <div id="student-list"></div>
+  </div>
+
+  <div id="sec-courses" class="section">
+    <div class="grid2" style="margin-bottom:1rem">
+      <div class="metric"><div class="val">12</div><div class="lbl">Normal courses</div></div>
+      <div class="metric"><div class="val">4</div><div class="lbl">Summer courses</div></div>
+    </div>
+    <div id="course-table"></div>
+  </div>
+</div>
+
+<script>
+const COURSES=[
+  {name:"Math",code:"Math_N1",level:1,credits:2,type:"normal"},
+  {name:"Programming 1",code:"Programming_1_N1",level:1,credits:3,type:"normal"},
+  {name:"Technical Writing",code:"Technical_Writing_N1",level:1,credits:3,type:"normal"},
+  {name:"Electronics",code:"Electronics_N2",level:2,credits:4,type:"normal"},
+  {name:"Data Structures",code:"Data_Structures_N2",level:2,credits:3,type:"normal"},
+  {name:"OOP",code:"OOP_N2",level:2,credits:3,type:"normal"},
+  {name:"Algorithms",code:"Algorithms_N3",level:3,credits:2,type:"normal"},
+  {name:"Operating Systems",code:"Operating_Systems_N3",level:3,credits:3,type:"normal"},
+  {name:"Databases",code:"Databases_N3",level:3,credits:3,type:"normal"},
+  {name:"Machine Learning",code:"Machine_Learning_N4",level:4,credits:3,type:"normal"},
+  {name:"Compilers",code:"Compilers_N4",level:4,credits:4,type:"normal"},
+  {name:"Programming Concepts",code:"Programming_Concepts_N4",level:4,credits:4,type:"normal"},
+  {name:"Math (Summer)",code:"Math_S1",level:1,credits:2,type:"summer"},
+  {name:"Compilers (Summer)",code:"Compilers_S4",level:4,credits:4,type:"summer"},
+  {name:"Algorithms (Summer)",code:"Algorithms_S3",level:3,credits:2,type:"summer"},
+  {name:"OOP (Summer)",code:"OOP_S2",level:2,credits:3,type:"summer"},
+];
+
+let students=[],currentStudent={},selectedCourses=[],grades={};
+
+function switchTab(t){
+  document.querySelectorAll('.tab').forEach((el,i)=>el.classList.toggle('active',['add','students','courses'][i]===t));
+  document.querySelectorAll('.section').forEach(el=>el.classList.remove('active'));
+  document.getElementById('sec-'+t).classList.add('active');
+  if(t==='students') renderStudents();
+  if(t==='courses') renderCourses();
+}
+
+function setStep(n){
+  [1,2,3,4].forEach(i=>{
+    const el=document.getElementById('s'+i);
+    el.className='step '+(i<n?'done':i===n?'active':'pending');
+    document.getElementById('step'+i).style.display=i===n?'block':'none';
+  });
+}
+
+function showAlert(msg){
+  document.getElementById('form-alert').innerHTML=msg?`<div class="alert error">${msg}</div>`:'';
+}
+
+function goStep2(){
+  const name=document.getElementById('inp-name').value.trim();
+  const id=document.getElementById('inp-id').value.trim();
+  const level=parseInt(document.getElementById('inp-level').value);
+  if(!name){showAlert('Please enter a name.');return;}
+  if(!id){showAlert('Please enter a student ID.');return;}
+  if(!level||level<1||level>4){showAlert('Level must be between 1 and 4.');return;}
+  showAlert('');
+  currentStudent={name,id,level,type:document.getElementById('inp-type').value};
+  selectedCourses=[];grades={};
+  const isSpecial=currentStudent.type==='special';
+  const available=COURSES.filter(c=>isSpecial||c.level<=level);
+  document.getElementById('course-hint').textContent=isSpecial
+    ?'Special program: you can register any course regardless of level. Select up to 7.'
+    :`General program: showing courses available for level ${level} and below. Select up to 7.`;
+  document.getElementById('course-list').innerHTML=available.map(c=>`
+    <div class="course-item" id="ci-${c.code}" onclick="toggleCourse('${c.code}')">
+      <input type="checkbox" id="cb-${c.code}" onclick="event.stopPropagation();toggleCourse('${c.code}')">
+      <div>
+        <div class="cname">${c.name}</div>
+        <div class="cmeta">Level ${c.level} &nbsp;•&nbsp; ${c.credits} credits &nbsp;•&nbsp; <span class="badge ${c.type}">${c.type}</span></div>
+      </div>
+    </div>`).join('');
+  setStep(2);
+}
+
+function toggleCourse(code){
+  const idx=selectedCourses.indexOf(code);
+  if(idx>-1){selectedCourses.splice(idx,1);delete grades[code];}
+  else{
+    if(selectedCourses.length>=7){alert('Maximum 7 courses allowed.');return;}
+    selectedCourses.push(code);
+  }
+  document.querySelectorAll('.course-item').forEach(el=>{
+    const c=el.id.replace('ci-','');
+    el.classList.toggle('selected',selectedCourses.includes(c));
+    document.getElementById('cb-'+c).checked=selectedCourses.includes(c);
+  });
+}
+
+function goStep3(){
+  if(selectedCourses.length===0){alert('Please select at least one course.');return;}
+  const courses=selectedCourses.map(code=>COURSES.find(c=>c.code===code));
+  document.getElementById('grade-list').innerHTML=courses.map(c=>`
+    <div class="grade-row">
+      <div class="gname">${c.name} <span style="font-size:11px;color:#888">(${c.credits} credits)</span></div>
+      <input type="number" id="g-${c.code}" min="0" max="100" placeholder="0–100"
+        value="${grades[c.code]||''}" oninput="updateGradeChip('${c.code}',this.value)"/>
+      <div class="grade-chip" id="chip-${c.code}" style="background:#eee;color:#888">—</div>
+    </div>`).join('');
+  courses.forEach(c=>{if(grades[c.code])updateGradeChip(c.code,grades[c.code]);});
+  setStep(3);
+}
+
+function gradeToGPA(g){
+  g=parseInt(g);
+  if(g>=97)return 4.0;if(g>=93)return 4.0;if(g>=90)return 3.7;
+  if(g>=87)return 3.3;if(g>=83)return 3.0;if(g>=80)return 2.7;
+  if(g>=77)return 2.3;if(g>=73)return 2.0;if(g>=70)return 1.7;
+  if(g>=67)return 1.3;if(g>=63)return 1.0;if(g>=60)return 0.7;
+  return 0.0;
+}
+
+function updateGradeChip(code,val){
+  grades[code]=val;
+  const chip=document.getElementById('chip-'+code);
+  if(!val||val===''){chip.textContent='—';chip.className='grade-chip';return;}
+  const gpa=gradeToGPA(val);
+  chip.textContent=gpa.toFixed(1);
+  chip.className='grade-chip '+(gpa>=3.0?'gpa-good':gpa>=2.0?'gpa-mid':'gpa-low');
+}
+
+function calcWeightedGPA(courses){
+  let total=0,credits=0;
+  courses.forEach(c=>{
+    const g=grades[c.code];
+    if(g){total+=gradeToGPA(g)*c.credits;credits+=c.credits;}
+  });
+  return credits>0?(total/credits):null;
+}
+
+function goStep4(){
+  const missing=selectedCourses.filter(code=>!grades[code]||grades[code]==='');
+  if(missing.length>0){alert('Please enter grades for all courses.');return;}
+  const courses=selectedCourses.map(code=>COURSES.find(c=>c.code===code));
+  const expenses=currentStudent.type==='general'
+    ?currentStudent.level*1000
+    :courses.reduce((s,c)=>s+c.credits*500,0);
+  const gpa=calcWeightedGPA(courses);
+  document.getElementById('confirm-content').innerHTML=`
+    <div style="display:flex;gap:12px;align-items:center;margin-bottom:12px">
+      <div class="avatar">${currentStudent.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}</div>
+      <div>
+        <div style="font-weight:500;font-size:15px">${currentStudent.name}</div>
+        <div style="font-size:12px;color:#888">${currentStudent.id} &nbsp;•&nbsp; Level ${currentStudent.level} &nbsp;•&nbsp;
+          <span class="badge ${currentStudent.type==='general'?'general':'special'}">${currentStudent.type==='general'?'General':'Special'}</span>
+        </div>
+      </div>
+    </div>
+    <hr class="divider">
+    <div style="font-size:13px;color:#888;margin-bottom:8px">Registered courses (${courses.length})</div>
+    ${courses.map(c=>`
+      <div class="course-detail-row">
+        <span>${c.name}</span>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="color:#888">${grades[c.code]}/100</span>
+          <span class="grade-chip ${gradeToGPA(grades[c.code])>=3.0?'gpa-good':gradeToGPA(grades[c.code])>=2.0?'gpa-mid':'gpa-low'}">${gradeToGPA(grades[c.code]).toFixed(1)}</span>
+        </div>
+      </div>`).join('')}
+    <hr class="divider">
+    <div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:6px">
+      <span style="color:#888">Overall GPA</span>
+      <span style="font-weight:500">${gpa!==null?gpa.toFixed(2):'—'} / 4.0</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:14px">
+      <span style="color:#888">Estimated expenses</span>
+      <span style="font-weight:500">${expenses.toLocaleString()} EGP</span>
+    </div>`;
+  setStep(4);
+}
+
+function submitStudent(){
+  const courses=selectedCourses.map(code=>COURSES.find(c=>c.code===code));
+  const expenses=currentStudent.type==='general'
+    ?currentStudent.level*1000
+    :courses.reduce((s,c)=>s+c.credits*500,0);
+  const gpa=calcWeightedGPA(courses);
+  students.push({...currentStudent,courses,grades:{...grades},expenses,gpa});
+  document.getElementById('inp-name').value='';
+  document.getElementById('inp-id').value='';
+  document.getElementById('inp-level').value='';
+  selectedCourses=[];grades={};
+  showAlert('');
+  setStep(1);
+  switchTab('students');
+}
+
+function renderStudents(){
+  const el=document.getElementById('student-list');
+  document.getElementById('m-total').textContent=students.length;
+  const gpas=students.map(s=>s.gpa).filter(g=>g!==null);
+  document.getElementById('m-avg').textContent=gpas.length>0?(gpas.reduce((a,b)=>a+b,0)/gpas.length).toFixed(2):'—';
+  if(students.length===0){el.innerHTML='<div class="empty">No students added yet.</div>';return;}
+  el.innerHTML=students.map((s,i)=>`
+    <div class="student-card">
+      <div class="student-header">
+        <div class="avatar">${s.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}</div>
+        <div class="student-info" style="flex:1">
+          <h3>${s.name}</h3>
+          <p>${s.id} &nbsp;•&nbsp; Level ${s.level} &nbsp;•&nbsp;
+            <span class="badge ${s.type==='general'?'general':'special'}">${s.type==='general'?'General':'Special'}</span>
+          </p>
+        </div>
+        <button class="btn danger" onclick="removeStudent(${i})">Remove</button>
+      </div>
+      ${s.gpa!==null?`
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:#888;margin-bottom:4px">
+          <span>GPA</span><span>${s.gpa.toFixed(2)} / 4.0</span>
+        </div>
+        <div class="gpa-bar"><div class="gpa-fill" style="width:${(s.gpa/4*100).toFixed(1)}%;background:${s.gpa>=3.0?'#3b6d11':s.gpa>=2.0?'#ba7517':'#a32d2d'}"></div></div>
+      `:''}
+      <hr class="divider">
+      <div style="font-size:13px;color:#888;margin-bottom:6px">Courses (${s.courses.length})</div>
+      ${s.courses.map(c=>`
+        <div class="course-detail-row">
+          <span>${c.name}</span>
+          <div style="display:flex;gap:8px;align-items:center">
+            <span style="color:#888">${s.grades[c.code]}/100</span>
+            <span class="grade-chip ${gradeToGPA(s.grades[c.code])>=3.0?'gpa-good':gradeToGPA(s.grades[c.code])>=2.0?'gpa-mid':'gpa-low'}">${gradeToGPA(s.grades[c.code]).toFixed(1)}</span>
+          </div>
+        </div>`).join('')}
+      <hr class="divider">
+      <div style="display:flex;justify-content:space-between;font-size:13px">
+        <span style="color:#888">Expenses: <strong>${s.expenses.toLocaleString()} EGP</strong></span>
+        <span style="color:#888">Courses: <strong>${s.courses.length}</strong></span>
+      </div>
+    </div>`).join('');
+}
+
+function removeStudent(i){students.splice(i,1);renderStudents();}
+
+function renderCourses(){
+  document.getElementById('course-table').innerHTML=[1,2,3,4].map(l=>`
+    <div class="card">
+      <h2>Level ${l}</h2>
+      ${COURSES.filter(c=>c.level===l).map(c=>`
+        <div class="course-detail-row">
+          <div>
+            <div style="font-size:14px;font-weight:500">${c.name}</div>
+            <div style="font-size:12px;color:#888">${c.code}</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:12px;color:#888">${c.credits} credits</span>
+            <span class="badge ${c.type}">${c.type}</span>
+          </div>
+        </div>`).join('')}
+    </div>`).join('');
+}
+</script>
+</body>
+</html>

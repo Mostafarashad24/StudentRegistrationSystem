@@ -1,0 +1,28 @@
+# Compiled binaries
+*.exe
+*.out
+*.o
+*.obj
+student_system
+
+# VS Code settings
+.vscode/
+
+# Visual Studio
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+Debug/
+Release/
+x64/
+x86/
+
+# Code::Blocks
+*.cbp
+*.layout
+*.depend
+
+# OS files
+.DS_Store
+Thumbs.db
